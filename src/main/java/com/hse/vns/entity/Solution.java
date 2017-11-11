@@ -34,6 +34,7 @@ public class Solution {
      * for each cluster iterate over elements and increment eigens/zeroes in each cluster
      * @return eigens variable
      */
+
     private int countEigens() {
         for (int i = 0; i< matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {

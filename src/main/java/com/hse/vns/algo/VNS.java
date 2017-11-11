@@ -10,7 +10,6 @@ package com.hse.vns.algo;
  *      if solution is better - use it
  *      otherwise - use next from neighbourhood
  */
-
 public class VNS {
 
 

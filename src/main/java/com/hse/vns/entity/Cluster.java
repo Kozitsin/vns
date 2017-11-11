@@ -12,8 +12,8 @@ public class Cluster {
     public int x2;
     public int y2;
 
-//    public int eigensCount = 0;
-//    public int zeroesCount = 0;
+//public int eigensCount = 0;
+//public int zeroesCount = 0;
 
     public Cluster(int x1, int y1, int x2, int y2) {
         this.x1 = x1;
