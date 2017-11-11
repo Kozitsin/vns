@@ -13,7 +13,7 @@ public class Solution {
     public int eigens = 0;
 
     /**
-     *
+     * List of Cluster objects in current solution
      */
     public List<Cluster> clusters;
 
@@ -32,21 +32,36 @@ public class Solution {
     /**
      * count eigens only one
      * for each cluster iterate over elements and increment eigens/zeroes in each cluster
-     * @return
+     * @return eigens variable
      */
     private int countEigens() {
         for (int i = 0; i< matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
-
+                eigens += matrix[i][j] ? 1 : 0;
             }
         }
+        return eigens;
     }
 
     public double evaluate() {
         GE = 0.0;
-        for (int i = 0; i < clusters.size(); i++) {
 
+        int clustersEigens = 0;
+        int clustersZeroes = 0;
+
+        for (Cluster cluster : clusters) {
+            for (int x = cluster.x1; x < cluster.x2; x++) {
+                for (int y = cluster.y1; y < cluster.y2; y++ ) {
+                    if (matrix[x][y]) {
+                        clustersEigens++;
+                    } else{
+                        clustersZeroes++;
+                    }
+                }
+            }
         }
+        GE = clustersEigens / (double)(eigens + clustersZeroes);
+        return GE;
     }
 
 }
