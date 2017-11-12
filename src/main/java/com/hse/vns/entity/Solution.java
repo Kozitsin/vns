@@ -11,6 +11,8 @@ public class Solution {
     public boolean[][] matrix;
 
     public int eigens = 0;
+    public int m = 0;
+    public int p = 0;
 
     /**
      * List of Cluster objects in current solution
@@ -26,6 +28,8 @@ public class Solution {
         this.GE = s.GE;
         this.eigens = 0;
         this.matrix = ArrayUtils.clone(s.matrix);
+        this.m = s.m;
+        this.p = s.p;
         // deep copy of clusters
     }
 
