@@ -13,12 +13,10 @@ public class VND {
     private static final Random rand = new Random();
 
     public static void apply(Solution s) {
-        if (rand.nextBoolean()){
+        if (rand.nextBoolean())
             moveRow(s);
-         }
-         else{
+         else
             moveColumn(s);
-        }
     }
 
     private static void moveRow(Solution s) {
@@ -62,7 +60,7 @@ public class VND {
         s.evaluate();
     }
 
-    private static void swapColumn(boolean[][]matr, int  i, int j, int len){
+    private static void swapColumn(boolean[][] matr, int  i, int j, int len){
         for (int k = 0; k < len; k++){
             boolean temp = matr[k][i];
             matr[k][i] = matr[k][j];

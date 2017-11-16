@@ -9,10 +9,9 @@ import static java.net.URLDecoder.decode;
 
 
 public class Reader {
-
     public static Solution read(String fileName) {
         Solution s;
-        boolean[][]matrix;
+        boolean[][] matrix;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(new File(decode(fileName, "UTF-8"))))) {
             String[] size = reader.readLine().split(" ");
@@ -22,13 +21,14 @@ public class Reader {
 
             for (int i = 0; i < m; i++){
                 String[] positions = reader.readLine().split(" ");
-                for (int j = 0; j < positions.length; j++){
-                    int v = Integer.valueOf(positions[j+1]);
+                for (int j = 1; j < positions.length; j++){
+                    int v = Integer.valueOf(positions[j]) - 1;
                     matrix[i][v] = true;
                 }
             }
 
             s = new Solution(m, p, matrix);
+            s.countEigens();
 
         } catch (IOException ex) {
             throw new DataProcessingException(ex);

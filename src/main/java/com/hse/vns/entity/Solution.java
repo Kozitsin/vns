@@ -2,7 +2,10 @@ package com.hse.vns.entity;
 
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 public class Solution {
     /**
@@ -10,7 +13,7 @@ public class Solution {
      */
     public boolean[][] matrix;
 
-    public int eigens = 0;
+    public static int eigens = 0;
     public int m = 0;
     public int p = 0;
 
@@ -28,15 +31,40 @@ public class Solution {
         this.m = m;
         this.p = p;
         this.matrix = matrix;
+        this.clusters = initPartition();
     }
 
     public Solution(Solution s) {
         this.GE = s.GE;
-        this.eigens = 0;
         this.matrix = ArrayUtils.clone(s.matrix);
         this.m = s.m;
         this.p = s.p;
-        // deep copy of clusters
+        this.clusters = s.clusters.stream()
+                .map(c -> new Cluster(c.x1, c.y1, c.x2, c.y2))
+                .collect(toList());
+    }
+
+    public void copyFrom(Solution s) {
+        this.GE = s.GE;
+        this.matrix = ArrayUtils.clone(s.matrix);
+        this.m = s.m;
+        this.p = s.p;
+        this.clusters = s.clusters.stream()
+                .map(c -> new Cluster(c.x1, c.y1, c.x2, c.y2))
+                .collect(toList());
+    }
+
+    private List<Cluster> initPartition() {
+        List<Cluster> clusters = new ArrayList<>(m);
+        int x = 0;
+        int y = 0;
+        for (; x < m - 1; x++) {
+            for (; y < p; y++) {
+                clusters.add(new Cluster(x, y, x+1, y+1));
+            }
+        }
+        clusters.add(new Cluster(x, y, x+1, p));
+        return clusters;
     }
 
     /**
@@ -44,8 +72,7 @@ public class Solution {
      * for each cluster iterate over elements and increment eigens/zeroes in each cluster
      * @return eigens variable
      */
-
-    private int countEigens() {
+    public int countEigens() {
         for (int i = 0; i< matrix.length; i++) {
             for (int j = 0; j < matrix.length; j++) {
                 eigens += matrix[i][j] ? 1 : 0;
@@ -74,5 +101,4 @@ public class Solution {
         GE = clustersEigens / (double)(eigens + clustersZeroes);
         return GE;
     }
-
 }

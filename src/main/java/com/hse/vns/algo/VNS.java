@@ -1,9 +1,8 @@
 package com.hse.vns.algo;
 
-import com.hse.vns.entity.Cluster;
-import com.hse.vns.entity.Solution;
+import com.hse.vns.entity.*;
+import com.hse.vns.utils.MoveActionFactory;
 
-import java.util.List;
 import java.util.Random;
 
 /**
@@ -17,128 +16,107 @@ import java.util.Random;
  *      otherwise - use next from neighbourhood
  */
 public class VNS {
-
     private static final Random rand = new Random();
+    private static final int NUMBER_OF_ITERATIONS = 100000;
+    private static final MoveActionFactory factory = new MoveActionFactory();
 
-    public static void change(Solution s) {
-        int num = rand.nextInt()%4;
-        if (num == 0){
-            shift(ShiftWType.LEFT, ShiftHType.UP, s);
-        }
-        else if(num == 1){
-            shift(ShiftWType.LEFT, ShiftHType.DOWN, s);
-        }
-        else if(num == 2) {
-            shift(ShiftWType.RIGHT, ShiftHType.DOWN, s);
-        }
-        else{
-            shift(ShiftWType.RIGHT, ShiftHType.UP, s);
-        }
+    private static boolean isTerminationCondition(int i) {
+        return i >= NUMBER_OF_ITERATIONS;
     }
 
+    public static Solution execute(Solution s) {
+        s.evaluate();
 
-    enum ShiftWType {
-        LEFT,
-        RIGHT
+        Solution best = new Solution(s);
+        for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
+            int k = 0;
+            while (best.GE > s.GE || isTerminationCondition(k++)) {
+                change(s);
+            }
+
+            VND.apply(s);
+
+            if (best.GE < s.GE) {
+                best.copyFrom(s);
+            }
+        }
+
+        return s;
     }
 
-    enum ShiftHType {
-        UP,
-        DOWN
+    private static void change(Solution s) {
+        int clusterId = rand.nextInt(s.clusters.size());
+        MoveAction action = factory.buildEligibleAction(s, clusterId);
+        shift(s, action, clusterId);
     }
 
-    private static void shift(ShiftWType wType, ShiftHType hType, Solution s){
-        List<Cluster> clusters = s.clusters;
+    private static void shift(Solution s, MoveAction moveAction, int clusterId) {
         double best = s.GE;
-        int temp1 = 0;
-        int w = 0;
 
-        for(int i = 0; i < s.clusters.size()-1; i++){
-            Cluster current = s.clusters.get(i);
-            Cluster next = s.clusters.get(i+1);
+        Cluster current;
+        Cluster next;
 
-            if (wType == ShiftWType.LEFT && hType == ShiftHType.UP) {
-                shiftLeft(current, next);
-                shiftUp(current, next);
-                if (s.evaluate() > best){
-                    temp1 = i;
-                    w = 0;
-                    best = s.GE;
-                }
+        // if last cluster, we will take previous
+        if (clusterId == s.clusters.size() - 1) {
+            current = s.clusters.get(clusterId - 1);
+            next = s.clusters.get(clusterId);
+        } else {
+            current = s.clusters.get(clusterId);
+            next = s.clusters.get(clusterId + 1);
+        }
+
+        if (moveAction.horizontalShift == HorizontalShiftType.LEFT &&
+                moveAction.verticalShift == VerticalShiftType.UP) {
+            shiftLeft(current, next);
+            shiftUp(current, next);
+            if (s.evaluate() < best) {
                 shiftRight(current, next);
                 shiftDown(current, next);
-
-            } else if (wType == ShiftWType.LEFT && hType == ShiftHType.DOWN) {
-                shiftLeft(current, next);
-                shiftDown(current, next);
-                if (s.evaluate() > best){
-                    temp1 = i;
-                    w = 1;
-                    best = s.GE;
-                }
-                shiftRight(current, next);
-                shiftUp(current, next);
-
-            } else if (wType == ShiftWType.RIGHT && hType == ShiftHType.UP) {
+            }
+        } else if (moveAction.horizontalShift == HorizontalShiftType.LEFT &&
+                moveAction.verticalShift == VerticalShiftType.DOWN) {
+            shiftLeft(current, next);
+            shiftDown(current, next);
+            if (s.evaluate() < best) {
                 shiftRight(current, next);
                 shiftUp(current, next);
-                if (s.evaluate() > best){
-                    temp1 = i;
-                    w = 2;
-                    best = s.GE;
-                }
+            }
+        } else if (moveAction.horizontalShift == HorizontalShiftType.RIGHT &&
+                moveAction.verticalShift == VerticalShiftType.UP) {
+            shiftRight(current, next);
+            shiftUp(current, next);
+            if (s.evaluate() < best) {
                 shiftLeft(current, next);
                 shiftDown(current, next);
-
-            } else  {//RIGHT DOWN
-                shiftRight(current, next);
-                shiftDown(current, next);
-                if (s.evaluate() > best){
-                    temp1 = i;
-                    w = 3;
-                    best = s.GE;
-                }
+            }
+        } else  {
+            shiftRight(current, next);
+            shiftDown(current, next);
+            if (s.evaluate() < best) {
                 shiftLeft(current, next);
                 shiftUp(current, next);
             }
         }
-
-        switch (w){
-            case 0: shiftLeft(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    shiftUp(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    break;
-            case 1: shiftLeft(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    shiftDown(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    break;
-            case 2: shiftRight(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    shiftUp(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    break;
-            case 3: shiftRight(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    shiftDown(s.clusters.get(temp1), s.clusters.get(temp1+1));
-                    break;
-            default: break;
-        }
         s.evaluate();
-
     }
 
     private static void shiftLeft(Cluster current, Cluster next){
-        current.x2 -= current.x2;
-        next.x1 -= next.x1;
+        current.y2--;
+        next.y1--;
     }
 
     private static void shiftRight(Cluster current, Cluster next){
-        current.x2 += current.x2;
-        next.x1 += next.x1;
+        current.y2++;
+        next.y1++;
     }
 
     private static void shiftUp(Cluster current, Cluster next){
-        current.y2 -= current.y2;
-        next.y1 -= next.y1;
+        current.x2--;
+        next.x1--;
     }
 
     private static void shiftDown(Cluster current, Cluster next){
-        current.y2 += current.y2;
-        next.y1 += next.y1;
+        current.x2++;
+        next.x1++;
     }
 }
