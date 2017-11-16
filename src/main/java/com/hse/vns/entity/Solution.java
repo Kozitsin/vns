@@ -24,6 +24,12 @@ public class Solution {
      */
     public double GE;
 
+    public Solution(int m, int p, boolean[][] matrix){
+        this.m = m;
+        this.p = p;
+        this.matrix = matrix;
+    }
+
     public Solution(Solution s) {
         this.GE = s.GE;
         this.eigens = 0;

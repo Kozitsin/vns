@@ -39,12 +39,12 @@ public class VNS {
 
     enum ShiftWType {
         LEFT,
-        RIGHT;
+        RIGHT
     }
 
     enum ShiftHType {
         UP,
-        DOWN;
+        DOWN
     }
 
     private static void shift(ShiftWType wType, ShiftHType hType, Solution s){
