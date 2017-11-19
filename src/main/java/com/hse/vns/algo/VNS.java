@@ -17,7 +17,7 @@ import java.util.Random;
  */
 public class VNS {
     private static final Random rand = new Random();
-    private static final int NUMBER_OF_ITERATIONS = 100000;
+    private static final int NUMBER_OF_ITERATIONS = 1000;
     private static final MoveActionFactory factory = new MoveActionFactory();
 
     private static boolean isTerminationCondition(int i) {
@@ -29,16 +29,21 @@ public class VNS {
 
         Solution best = new Solution(s);
         for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
-            int k = 0;
-            while (best.GE > s.GE || isTerminationCondition(k++)) {
-                change(s);
-            }
 
             VND.apply(s);
 
             if (best.GE < s.GE) {
                 best.copyFrom(s);
             }
+
+            for (int k = 0; k < 10; k++){
+                change(s);
+                if (best.GE < s.GE) {
+                    best.copyFrom(s);
+                }
+
+            }
+
         }
 
         return s;
@@ -67,6 +72,9 @@ public class VNS {
 
         if (moveAction.horizontalShift == HorizontalShiftType.LEFT &&
                 moveAction.verticalShift == VerticalShiftType.UP) {
+            System.out.println(String.format("ID: %1$s, HST: %2$s, VSH:%3$s", clusterId, moveAction.horizontalShift, moveAction.verticalShift));
+            System.out.println(String.format("current x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", current.x1, current.x2, current.y1, current.y2));
+            System.out.println(String.format("next    x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", next.x1, next.x2, next.y1, next.y2));
             shiftLeft(current, next);
             shiftUp(current, next);
             if (s.evaluate() < best) {
@@ -75,6 +83,9 @@ public class VNS {
             }
         } else if (moveAction.horizontalShift == HorizontalShiftType.LEFT &&
                 moveAction.verticalShift == VerticalShiftType.DOWN) {
+            System.out.println(String.format("ID: %1$s, HST: %2$s, VSH:%3$s", clusterId, moveAction.horizontalShift, moveAction.verticalShift));
+            System.out.println(String.format("current x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", current.x1, current.x2, current.y1, current.y2));
+            System.out.println(String.format("next    x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", next.x1, next.x2, next.y1, next.y2));
             shiftLeft(current, next);
             shiftDown(current, next);
             if (s.evaluate() < best) {
@@ -83,6 +94,9 @@ public class VNS {
             }
         } else if (moveAction.horizontalShift == HorizontalShiftType.RIGHT &&
                 moveAction.verticalShift == VerticalShiftType.UP) {
+            System.out.println(String.format("ID: %1$s, HST: %2$s, VSH:%3$s", clusterId, moveAction.horizontalShift, moveAction.verticalShift));
+            System.out.println(String.format("current x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", current.x1, current.x2, current.y1, current.y2));
+            System.out.println(String.format("next    x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", next.x1, next.x2, next.y1, next.y2));
             shiftRight(current, next);
             shiftUp(current, next);
             if (s.evaluate() < best) {
@@ -90,6 +104,9 @@ public class VNS {
                 shiftDown(current, next);
             }
         } else  {
+            System.out.println(String.format("ID: %1$s, HST: %2$s, VSH:%3$s", clusterId, moveAction.horizontalShift, moveAction.verticalShift));
+            System.out.println(String.format("current x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", current.x1, current.x2, current.y1, current.y2));
+            System.out.println(String.format("next    x1: %1$s, x2: %2$s, y1: %3$s, y2: %4$s", next.x1, next.x2, next.y1, next.y2));
             shiftRight(current, next);
             shiftDown(current, next);
             if (s.evaluate() < best) {

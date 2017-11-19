@@ -20,19 +20,19 @@ public class MoveActionFactory {
     private boolean isEligible(Solution s, MoveAction moveAction, int clusterId) {
         Cluster cluster = s.clusters.get(clusterId);
 
-        if (cluster.x1 == 0 && moveAction.verticalShift == VerticalShiftType.UP) {
+        if ((cluster.x1 == 0 || cluster.x1 > cluster.x2 -1 )&& moveAction.verticalShift == VerticalShiftType.UP) {
             return false;
         }
 
-        if (cluster.x2 == s.m && moveAction.verticalShift == VerticalShiftType.DOWN) {
+        if (cluster.x2 == s.m  && moveAction.verticalShift == VerticalShiftType.DOWN) {
             return false;
         }
 
-        if (cluster.y1 == 0 && moveAction.horizontalShift == HorizontalShiftType.LEFT) {
+        if ((cluster.y1 == 0 || cluster.y1 > cluster.y2 - 1) && moveAction.horizontalShift == HorizontalShiftType.LEFT) {
             return false;
         }
 
-        if (cluster.y2 == s.p && moveAction.horizontalShift == HorizontalShiftType.RIGHT) {
+        if (cluster.y2 == s.p  && moveAction.horizontalShift == HorizontalShiftType.RIGHT) {
             return false;
         }
 

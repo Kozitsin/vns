@@ -59,11 +59,9 @@ public class Solution {
         int x = 0;
         int y = 0;
         for (; x < m - 1; x++) {
-            for (; y < p; y++) {
-                clusters.add(new Cluster(x, y, x+1, y+1));
-            }
+            clusters.add(new Cluster(x, x, x+1, x+1));
         }
-        clusters.add(new Cluster(x, y, x+1, p));
+        clusters.add(new Cluster(x, x, x+1, p));
         return clusters;
     }
 
@@ -90,6 +88,7 @@ public class Solution {
         for (Cluster cluster : clusters) {
             for (int x = cluster.x1; x < cluster.x2; x++) {
                 for (int y = cluster.y1; y < cluster.y2; y++ ) {
+                    //System.out.println(String.format("x: %1$s, y:%2$s", x, y));
                     if (matrix[x][y]) {
                         clustersEigens++;
                     } else{
