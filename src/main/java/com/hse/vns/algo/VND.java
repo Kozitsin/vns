@@ -13,10 +13,14 @@ public class VND {
     private static final Random rand = new Random();
 
     public static void apply(Solution s) {
-        if (rand.nextBoolean())
+
+        if (rand.nextBoolean()) {
+            System.out.println("Moving rows");
             moveRow(s);
-         else
+        } else{
+            System.out.println("Moving columns");
             moveColumn(s);
+        }
     }
 
     private static void moveRow(Solution s) {
@@ -24,10 +28,13 @@ public class VND {
         int temp1 = 0;
         int temp2 = 0;
 
-        for (int i =0; i < s.m; i++) {
+        for (int i = 0; i < s.m; i++) {
             for (int j = i + 1; j < s.m; j++) {
                 ArrayUtils.swap(s.matrix, i, j);
-                if (s.evaluate() > best){
+                double evaluated = s.evaluate();
+                System.out.println(String.format("Swapped! Was: %1$s. Now: %2$s", best, evaluated));
+                if (evaluated > best){
+                    System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
                     temp1 = i;
                     temp2 = j;
                     best = s.GE;
@@ -48,7 +55,10 @@ public class VND {
         for (int i =0; i < s.p; i++) {
             for (int j = i + 1; j < s.p; j++) {
                 swapColumn(s.matrix, i, j, s.m);
-                if (s.evaluate() > best){
+                double evaluated = s.evaluate();
+                System.out.println(String.format("Swapped! Was: %1$s. Now: %2$s", best, evaluated));
+                if (evaluated > best){
+                    System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
                     temp1 = i;
                     temp2 = j;
                     best = s.GE;

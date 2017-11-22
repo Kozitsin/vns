@@ -14,7 +14,7 @@ public class VNSTest extends TestUtils {
         Solution s = Reader.read(getFile("5x5.txt"));
         Solution result = VNS.execute(s);
         System.out.println(result.GE);
-        System.out.println(Arrays.deepToString(result.matrix));
+        System.out.println(result.printMatrix());
         System.out.println(result.clusters);
 
     }

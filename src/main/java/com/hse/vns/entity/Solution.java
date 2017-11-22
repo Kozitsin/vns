@@ -1,9 +1,11 @@
 package com.hse.vns.entity;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
@@ -99,5 +101,21 @@ public class Solution {
         }
         GE = clustersEigens / (double)(eigens + clustersZeroes);
         return GE;
+    }
+
+    public String printMatrix() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < m; i++) {
+            sb.append(StringUtils.join(convert(matrix[i]), ' ')).append("\n");
+        }
+        return sb.toString();
+    }
+
+    private int[] convert(boolean[] arr) {
+        int[] intArr = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            intArr[i] = arr[i] ? 1 : 0;
+        }
+        return intArr;
     }
 }
