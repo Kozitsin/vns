@@ -15,10 +15,8 @@ public class VND {
     public static void apply(Solution s) {
 
         if (rand.nextBoolean()) {
-            System.out.println("Moving rows");
             moveRow(s);
         } else{
-            System.out.println("Moving columns");
             moveColumn(s);
         }
     }
@@ -32,7 +30,6 @@ public class VND {
             for (int j = i + 1; j < s.m; j++) {
                 ArrayUtils.swap(s.matrix, i, j);
                 double evaluated = s.evaluate();
-                System.out.println(String.format("Swapped! Was: %1$s. Now: %2$s", best, evaluated));
                 if (evaluated > best){
                     System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
                     temp1 = i;
@@ -56,7 +53,6 @@ public class VND {
             for (int j = i + 1; j < s.p; j++) {
                 swapColumn(s.matrix, i, j, s.m);
                 double evaluated = s.evaluate();
-                System.out.println(String.format("Swapped! Was: %1$s. Now: %2$s", best, evaluated));
                 if (evaluated > best){
                     System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
                     temp1 = i;
