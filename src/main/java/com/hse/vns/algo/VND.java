@@ -31,7 +31,7 @@ public class VND {
                 ArrayUtils.swap(s.matrix, i, j);
                 double evaluated = s.evaluate();
                 if (evaluated > best){
-                    System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
+                    //System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
                     temp1 = i;
                     temp2 = j;
                     best = s.GE;
@@ -54,7 +54,7 @@ public class VND {
                 swapColumn(s.matrix, i, j, s.m);
                 double evaluated = s.evaluate();
                 if (evaluated > best){
-                    System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
+                    //System.out.println(String.format("Improved! Was: %1$s. Now: %2$s", best, s.GE));
                     temp1 = i;
                     temp2 = j;
                     best = s.GE;

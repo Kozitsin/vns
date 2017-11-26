@@ -18,39 +18,49 @@ import java.util.Random;
 public class VNS {
     private static final boolean DEBUG_MODE = false;
     private static final Random rand = new Random();
-    private static final int NUMBER_OF_ITERATIONS = 100000;
-
-    private static boolean isTerminationCondition(int i) {
-        return i >= NUMBER_OF_ITERATIONS;
-    }
+    private static final int MAX_ITER_WO_IMP_NUM = 1000000;
 
     public static Solution execute(Solution s) {
         s.evaluate();
-
         Solution best = new Solution(s);
-        for (int i = 0; i < NUMBER_OF_ITERATIONS; i++) {
 
+        int iterationsWithoutImprovement = 0;
+
+        while (iterationsWithoutImprovement < MAX_ITER_WO_IMP_NUM) {
             VND.apply(s);
 
             if (best.GE < s.GE) {
+                iterationsWithoutImprovement = 0;
                 best.copyFrom(s);
                 System.out.println(best.GE);
-
                 if (MathUtils.equals(1.0, s.GE)) {
                     break;
                 }
+            } else {
+                iterationsWithoutImprovement++;
             }
 
-            for (int k = 0; k < NUMBER_OF_ITERATIONS / 100; k++) {
-                if (rand.nextBoolean()) {
-                    join(s);
-                } else {
-                    split(s);
-                }
-                if (best.GE < s.GE) {
-                    best.copyFrom(s);
-                }
+            if (rand.nextBoolean()) {
+                join(s);
+            } else {
+                split(s);
             }
+
+            if (best.GE < s.GE) {
+                iterationsWithoutImprovement = 0;
+                best.copyFrom(s);
+            }
+
+//            for (int k = 0; k < MAX_ITER_NUM; k++) {
+//                if (rand.nextBoolean()) {
+//                    join(s);
+//                } else {
+//                    split(s);
+//                }
+//                if (best.GE < s.GE) {
+//                    best.copyFrom(s);
+//                }
+//            }
         }
         return best;
     }
@@ -59,19 +69,20 @@ public class VNS {
         int clusterId = rand.nextInt(s.clusters.size());
         Cluster current = s.clusters.get(clusterId);
 
-        int diff = current.x2 - current.x1;
-        int diff2 = current.y2 - current.y1;
+        int diff1 = current.x2 - current.x1 - 1;
+        int diff2 = current.y2 - current.y1 - 1;
 
-        if (diff > 1 && diff == diff2) {
-            int split = rand.nextInt(diff) + current.x1 + 1;
+        if (diff1 > 0 && diff2 > 0) {
+            int splitX = rand.nextInt(diff1) + current.x1 + 1;
+            int splitY = rand.nextInt(diff2) + current.y1 + 1;
 
             if (DEBUG_MODE) {
-                System.out.println(String.format("Diff: %1$s; Split: %2$s;", diff, split));
+                //System.out.println(String.format("Diff: %1$s; Split: %2$s;", diff, split));
             }
 
-            if (split != current.x2 && split != current.y2 && split != current.x1 && split != current.y1) {
-                Cluster before = new Cluster(current.x1, current.y1, split, split);
-                Cluster after = new Cluster(split, split, current.x2, current.y2);
+            if (splitX != current.x2 && splitY != current.y2 && splitX != current.x1 && splitY != current.y1) {
+                Cluster before = new Cluster(current.x1, current.y1, splitX, splitY);
+                Cluster after = new Cluster(splitX, splitY, current.x2, current.y2);
 
                 if (DEBUG_MODE) {
                     System.out.println(String.format("Current cluster: %1$s", current));
