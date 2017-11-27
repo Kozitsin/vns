@@ -111,7 +111,7 @@ public class Solution {
         for (int j = 0; j < clusters.size(); j++) {
             boolean[] line = matrix[machineId];
             Cluster c = clusters.get(j);
-            for (int i = c.x1; i < c.x2; i++) {
+            for (int i = c.y1; i < c.y2; i++) {
                 if (line[i]) {
                     return j;
                 }
@@ -133,7 +133,7 @@ public class Solution {
     private int getClusterIdForParts(int partId) {
         for (int j = 0; j < clusters.size(); j++) {
             Cluster c = clusters.get(j);
-            for (int i = c.y1; i < c.y2; i++) {
+            for (int i = c.x1; i < c.x2; i++) {
                 if (matrix[i][partId]) {
                     return j;
                 }
