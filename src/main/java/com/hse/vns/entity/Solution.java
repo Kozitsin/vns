@@ -15,9 +15,16 @@ public class Solution {
      */
     public boolean[][] matrix;
 
+
+
     public static int eigens = 0;
     public int m = 0;
     public int p = 0;
+
+    public int[] partsMapping;
+    public int[] machineMapping;
+
+
 
     /**
      * List of Cluster objects in current solution
@@ -29,18 +36,30 @@ public class Solution {
      */
     public double GE;
 
+
+
     public Solution(int m, int p, boolean[][] matrix){
         this.m = m;
         this.p = p;
         this.matrix = matrix;
         this.clusters = initPartition();
+        this.machineMapping = new int[m];
+        this.partsMapping = new int[p];
+        fillMappings(this.machineMapping);
+        fillMappings(this.partsMapping);
     }
 
     public Solution(Solution s) {
         this.GE = s.GE;
-        this.matrix = ArrayUtils.clone(s.matrix);
         this.m = s.m;
         this.p = s.p;
+        this.matrix = new boolean[m][p];
+        for (int  i = 0 ; i  < m; i++) {
+            this.matrix[i] = ArrayUtils.clone(s.matrix[i]);
+        }
+        this.machineMapping = ArrayUtils.clone(s.machineMapping);
+        this.partsMapping = ArrayUtils.clone(s.partsMapping);
+
         this.clusters = s.clusters.stream()
                 .map(c -> new Cluster(c.x1, c.y1, c.x2, c.y2))
                 .collect(toList());
@@ -48,9 +67,14 @@ public class Solution {
 
     public void copyFrom(Solution s) {
         this.GE = s.GE;
-        this.matrix = ArrayUtils.clone(s.matrix);
         this.m = s.m;
         this.p = s.p;
+        this.matrix = new boolean[m][p];
+        for (int  i = 0 ; i  < m; i++) {
+            this.matrix[i] = ArrayUtils.clone(s.matrix[i]);
+        }
+        this.machineMapping = ArrayUtils.clone(s.machineMapping);
+        this.partsMapping = ArrayUtils.clone(s.partsMapping);
         this.clusters = s.clusters.stream()
                 .map(c -> new Cluster(c.x1, c.y1, c.x2, c.y2))
                 .collect(toList());
@@ -65,6 +89,58 @@ public class Solution {
         }
         clusters.add(new Cluster(x, x, x+1, p));
         return clusters;
+    }
+
+    private void fillMappings(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = i;
+        }
+    }
+
+    public String getMachinesLine() {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i < this.machineMapping.length; i++) {
+            int originalMachineId = this.machineMapping[i];
+            int clusterId = getClusterIdForMachine(i);
+            sb.append(originalMachineId + 1).append("_").append(clusterId + 1).append(" ");
+        }
+        return sb.toString();
+    }
+
+    private int getClusterIdForMachine(int machineId) {
+        for (int j = 0; j < clusters.size(); j++) {
+            boolean[] line = matrix[machineId];
+            Cluster c = clusters.get(j);
+            for (int i = c.x1; i < c.x2; i++) {
+                if (line[i]) {
+                    return j;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public String getPartsLine() {
+        StringBuilder sb = new StringBuilder();
+        for (int i=0; i < this.partsMapping.length; i++) {
+            int originalPartId = this.partsMapping[i];
+            int clusterPId = getClusterIdForParts(i);
+            sb.append(originalPartId + 1).append("_").append(clusterPId + 1).append(" ");
+        }
+        return sb.toString();
+    }
+
+    private int getClusterIdForParts(int partId) {
+        for (int j = 0; j < clusters.size(); j++) {
+            boolean[] line = matrix[partId];
+            Cluster c = clusters.get(j);
+            for (int i = c.y1; i < c.y2; i++) {
+                if (line[i]) {
+                    return j;
+                }
+            }
+        }
+        return -1;
     }
 
     /**

@@ -25,6 +25,8 @@ public class VND {
         double best = s.GE;
         int temp1 = 0;
         int temp2 = 0;
+        int temp3 = 0;
+        boolean improved = false;
 
         for (int i = 0; i < s.m; i++) {
             for (int j = i + 1; j < s.m; j++) {
@@ -35,12 +37,19 @@ public class VND {
                     temp1 = i;
                     temp2 = j;
                     best = s.GE;
+                    improved = true;
                 }
                 ArrayUtils.swap(s.matrix, i, j);
             }
         }
-        ArrayUtils.swap(s.matrix, temp1, temp2);
-        s.evaluate();
+        if (improved){
+            ArrayUtils.swap(s.matrix, temp1, temp2);
+            temp3 = s.machineMapping[temp1];
+            s.machineMapping[temp1] = s.machineMapping[temp2];
+            s.machineMapping[temp2] = temp3;
+            s.evaluate();
+        }
+
     }
 
 
@@ -48,6 +57,8 @@ public class VND {
         double best = s.GE;
         int temp1 = 0;
         int temp2 = 0;
+        int temp3 = 0;
+        boolean improved = false;
 
         for (int i =0; i < s.p; i++) {
             for (int j = i + 1; j < s.p; j++) {
@@ -58,12 +69,18 @@ public class VND {
                     temp1 = i;
                     temp2 = j;
                     best = s.GE;
+                    improved = true;
                 }
                 swapColumn(s.matrix, i, j, s.m);
             }
         }
-        swapColumn(s.matrix, temp1, temp2, s.m);
-        s.evaluate();
+        if (improved) {
+            swapColumn(s.matrix, temp1, temp2, s.m);
+            temp3 = s.partsMapping[temp1];
+            s.partsMapping[temp1] = s.partsMapping[temp2];
+            s.partsMapping[temp2] = temp3;
+            s.evaluate();
+        }
     }
 
     private static void swapColumn(boolean[][] matr, int  i, int j, int len){

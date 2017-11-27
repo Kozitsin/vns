@@ -18,7 +18,7 @@ import java.util.Random;
 public class VNS {
     private static final boolean DEBUG_MODE = false;
     private static final Random rand = new Random();
-    private static final int MAX_ITER_WO_IMP_NUM = 1000000;
+    private static final int MAX_ITER_WO_IMP_NUM = 3000000;
 
     public static Solution execute(Solution s) {
         s.evaluate();
