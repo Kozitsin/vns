@@ -132,10 +132,9 @@ public class Solution {
 
     private int getClusterIdForParts(int partId) {
         for (int j = 0; j < clusters.size(); j++) {
-            boolean[] line = matrix[partId];
             Cluster c = clusters.get(j);
             for (int i = c.y1; i < c.y2; i++) {
-                if (line[i]) {
+                if (matrix[i][partId]) {
                     return j;
                 }
             }
