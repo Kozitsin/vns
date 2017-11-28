@@ -113,7 +113,7 @@ public class Solution {
         }
         return sb.toString();
     }
-    /**
+  
     public String getMachinesLine() {
         StringBuilder sb = new StringBuilder();
         for (int i=0; i < this.machineMapping.length; i++) {
@@ -160,6 +160,7 @@ public class Solution {
     }
 
 
+     /**
      * count eigens only one
      * for each cluster iterate over elements and increment eigens/zeroes in each cluster
      * @return eigens variable
