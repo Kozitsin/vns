@@ -10,15 +10,25 @@ import java.util.Arrays;
 public class VNSTest extends TestUtils {
 
     @Test
+    public void testOn5x5() {
+        Solution s = Reader.read(getFile("5x5.txt"));
+        Solution result = VNS.execute(s);
+        System.out.println(result.GE);
+        System.out.println(result.printMatrix());
+        System.out.println(result.clusters);
+        System.out.println(result.printMachine());
+        System.out.println(result.printParts());
+    }
+
+    @Test
     public void testOn20x20() {
         Solution s = Reader.read(getFile("20x20.txt"));
         Solution result = VNS.execute(s);
         System.out.println(result.GE);
         System.out.println(result.printMatrix());
         System.out.println(result.clusters);
-        System.out.println(result.getMachinesLine());
-        System.out.println(result.getPartsLine());
-
+        System.out.println(result.printMachine());
+        System.out.println(result.printParts());
     }
 
     @Test
@@ -28,9 +38,8 @@ public class VNSTest extends TestUtils {
         System.out.println(result.GE);
         System.out.println(result.printMatrix());
         System.out.println(result.clusters);
-        System.out.println(result.getMachinesLine());
-        System.out.println(result.getPartsLine());
-
+        System.out.println(result.printMachine());
+        System.out.println(result.printParts());
     }
 
     @Test
@@ -40,9 +49,8 @@ public class VNSTest extends TestUtils {
         System.out.println(result.GE);
         System.out.println(result.printMatrix());
         System.out.println(result.clusters);
-        System.out.println(result.getMachinesLine());
-        System.out.println(result.getPartsLine());
-
+        System.out.println(result.printMachine());
+        System.out.println(result.printParts());
     }
 
     @Test
@@ -52,8 +60,8 @@ public class VNSTest extends TestUtils {
         System.out.println(result.GE);
         System.out.println(result.printMatrix());
         System.out.println(result.clusters);
-        System.out.println(result.getMachinesLine());
-        System.out.println(result.getPartsLine());
+        System.out.println(result.printMachine());
+        System.out.println(result.printParts());
     }
 
     @Test
@@ -63,11 +71,7 @@ public class VNSTest extends TestUtils {
         System.out.println(result.GE);
         System.out.println(result.printMatrix());
         System.out.println(result.clusters);
-        System.out.println(result.getMachinesLine());
-        System.out.println(result.getPartsLine());
-
+        System.out.println(result.printMachine());
+        System.out.println(result.printParts());
     }
 }
-
-//0.08264462809917356
-//0.07079646017699115

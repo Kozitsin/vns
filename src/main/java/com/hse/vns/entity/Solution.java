@@ -15,16 +15,12 @@ public class Solution {
      */
     public boolean[][] matrix;
 
-
-
     public static int eigens = 0;
     public int m = 0;
     public int p = 0;
 
     public int[] partsMapping;
     public int[] machineMapping;
-
-
 
     /**
      * List of Cluster objects in current solution
@@ -35,7 +31,6 @@ public class Solution {
      * Objective Function
      */
     public double GE;
-
 
 
     public Solution(int m, int p, boolean[][] matrix){
@@ -97,6 +92,28 @@ public class Solution {
         }
     }
 
+    public String printMachine() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < clusters.size(); i++) {
+            Cluster c = clusters.get(i);
+            for(int j = c.x1; j <c.x2; j++){
+                sb.append(machineMapping[j]+1).append("_").append(i + 1).append(" ");
+            }
+        }
+        return sb.toString();
+    }
+
+    public String printParts() {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < clusters.size(); i++) {
+            Cluster c = clusters.get(i);
+            for(int j = c.y1; j <c.y2; j++){
+                sb.append(partsMapping[j]+1).append("_").append(i + 1).append(" ");
+            }
+        }
+        return sb.toString();
+    }
+    /**
     public String getMachinesLine() {
         StringBuilder sb = new StringBuilder();
         for (int i=0; i < this.machineMapping.length; i++) {
@@ -142,14 +159,14 @@ public class Solution {
         return -1;
     }
 
-    /**
+
      * count eigens only one
      * for each cluster iterate over elements and increment eigens/zeroes in each cluster
      * @return eigens variable
      */
     public int countEigens() {
-        for (int i = 0; i< matrix.length; i++) {
-            for (int j = 0; j < matrix.length; j++) {
+        for (int i = 0; i< m; i++) {
+            for (int j = 0; j < p; j++) {
                 eigens += matrix[i][j] ? 1 : 0;
             }
         }

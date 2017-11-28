@@ -50,17 +50,6 @@ public class VNS {
                 iterationsWithoutImprovement = 0;
                 best.copyFrom(s);
             }
-
-//            for (int k = 0; k < MAX_ITER_NUM; k++) {
-//                if (rand.nextBoolean()) {
-//                    join(s);
-//                } else {
-//                    split(s);
-//                }
-//                if (best.GE < s.GE) {
-//                    best.copyFrom(s);
-//                }
-//            }
         }
         return best;
     }
